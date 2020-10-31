@@ -160,12 +160,7 @@ namespace TCPServer
             var curClient = SockeList.Find(x => x.IMEI1 == state.IMEI1);
             if (curClient != null)
             {
-                //if client disconnected                
-                //if (!curClient.IsConnected)
-                //{
-                //    curClient.Timer.Stop();
-                //    clientDis(curClient);
-                //}
+               
                 DateTime startTime = curClient.lastDateTimeConnected;
                 DateTime endTime = DateTime.Now;
                 TimeSpan span = endTime.Subtract(startTime);

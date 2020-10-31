@@ -129,19 +129,25 @@ namespace TCPServer
         /// <param name="paramArray">HDS Message </param>        
         /// <param name="callfrom">this Method Call from ..</param>
         /// <returns></returns>
-        private static async Task UpdateMachineAfterHandshake(Socket MasterSocket, string Imei1, string[] paramArray,string callfrom)
+        private static async Task UpdateMachineAfterHandshake(Socket MasterSocket, string Imei1,
+                 string[] paramArray,string callfrom)
         {
             var slaves =await fillSlave(paramArray);
             for (int i = 0; i < slaves.Count; i++)
             {
                 var str = $"IMEI: {slaves.ElementAt(i).Key}, State: {slaves.ElementAt(i).Value}";
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"*************************************");
+                Console.WriteLine($" {str} ---  @{DateTime.Now}         *");
+                Console.WriteLine($"*************************************");
+                Console.ForegroundColor = ConsoleColor.Green;
                 _ = LogErrorAsync(new Exception("UpdateMachineAfterHandShake"), str, callfrom).ConfigureAwait(false);
                 _ = UpdateMachinesState(
                           Imei1,
                           slaves.ElementAt(i).Key,  //Imei
                           slaves.ElementAt(i).Value, //status
                           "0", "0", "UpdateMachineAfterHandshake").ConfigureAwait(false);
-               _ = SendWaitingTest(MasterSocket, Imei1, slaves.ElementAt(i).Key).ConfigureAwait(false);               
+               _ = SendWaitingTest(MasterSocket, Imei1, slaves.ElementAt(i).Key).ConfigureAwait(false);                
             }
         }
         /// <summary>
