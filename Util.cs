@@ -1526,10 +1526,12 @@ namespace TCPServer
                 {
                     //Update 990525-- handle 6 channel
                     var newContent = $"TST#\"IMEI1\":\"{Imei1}\"#\"IMEI2\":\"{Imei2}\"#";
-                    var content = (newContent + item.ToString().Replace("}", "").Replace(",", "#").Replace("{", "")).Replace(" ", "").Replace("\r", "").Replace("\n", "").ToString().Encrypt("sample_shared_secret", VIKey);
+                    var content = (newContent + item.ToString().Replace("}", "").Replace(",", "#").Replace("{", "")).Replace(" ", "").Replace("\r", "").Replace("\n", "").ToString();
+                    _= LogErrorAsync(new Exception("TST"), content, $"IMEI1={Imei1} IMEI2={Imei2}");
+                     content = content.Encrypt("sample_shared_secret", VIKey);
                     //change content by testid --98-12-01
                     if (AsynchronousSocketListener.SendedTest.Find(t => t.Contains(content)) == null)
-                    {
+                    {                    
                        AsynchronousSocketListener.Send(MasterSocket, VIKey + " ," + content);
                     }
                 }
